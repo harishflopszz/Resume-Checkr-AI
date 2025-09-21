@@ -1,0 +1,8 @@
+version: 1
+review:
+  auto_review:
+    enabled: true       # Automatically reviews PRs
+    on:
+      - pull_request
+  instructions: |
+    Focus on clean code, best practices, security, and performance.
