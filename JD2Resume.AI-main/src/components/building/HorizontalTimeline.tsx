@@ -21,7 +21,12 @@ export function HorizontalTimeline({
         />
       </div>
 
-      <div className="mt-3 grid grid-cols-5 gap-2 max-w-4xl mx-auto">
+      <div
+        className="mt-3 grid gap-2 max-w-4xl mx-auto"
+        style={{ gridTemplateColumns: `repeat(${steps.length || 1}, minmax(0,1fr))` }}
+        aria-label="Progress timeline"
+        role="list"
+      >
         {steps.map((s, i) => {
           const isCompleted = i < currentStepIndex;
           const isCurrent = i === currentStepIndex;
