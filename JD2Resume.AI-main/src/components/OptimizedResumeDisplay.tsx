@@ -1053,23 +1053,10 @@ const OptimizedResumeDisplay: React.FC<OptimizedResumeDisplayProps> = ({ resume,
                 </SectionCard>
               )}
 
-              {finalResume.additionalSections && finalResume.additionalSections.filter((section: any) => {
-                if (!section || !section.title || !section.content) return false;
-                if (Array.isArray(section.content)) {
-                  return section.content.length > 0 && section.content.some((content: any) => typeof content === 'string' && content.trim().length > 0);
-                }
-                return typeof section.content === 'string' && section.content.trim().length > 0;
-              }).length > 0 && (
-                <SectionCard title="Additional Information" icon={Sparkles}>
-                  <div className="space-y-6">
-                    {finalResume.additionalSections
-                      .filter((section: any) => {
-                        if (!section || !section.title || !section.content) return false;
-                        if (Array.isArray(section.content)) {
-                          return section.content.length > 0 && section.content.some((content: any) => typeof content === 'string' && content.trim().length > 0);
-                        }
-                        return typeof section.content === 'string' && section.content.trim().length > 0;
-                      })
+  additionalSections?: Array<{
+    title: string;
+    content: string | string[];
+  }>;
                       .map((section: any, i: number) => (
                         <div key={i} className="border-b border-gray-100 pb-4 last:border-b-0">
                           <h4 className="font-bold text-base sm:text-lg text-black">{section.title}</h4>
