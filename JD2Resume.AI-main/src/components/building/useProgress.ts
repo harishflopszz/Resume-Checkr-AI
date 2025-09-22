@@ -23,10 +23,13 @@ export function useProgress(steps: StepDefinition[]) {
     if (currentStepIndex < steps.length) {
       const currentStep = steps[currentStepIndex];
 
+      const INTERVAL_MS = 50;
+      const prevTarget = (currentStepIndex / steps.length) * 100;
+      const targetProgress = ((currentStepIndex + 1) / steps.length) * 100;
+      const ticks = Math.max(1, Math.round(currentStep.duration / INTERVAL_MS));
+      const increment = (targetProgress - prevTarget) / ticks;
       progressInterval = setInterval(() => {
         setProgress((prev) => {
-          const targetProgress = ((currentStepIndex + 1) / steps.length) * 100;
-          const increment = 100 / (steps.length * (currentStep.duration / 100));
           const newValue = prev + increment;
           if (newValue >= targetProgress) {
             if (progressInterval) clearInterval(progressInterval);
@@ -34,7 +37,7 @@ export function useProgress(steps: StepDefinition[]) {
           }
           return newValue;
         });
-      }, 50);
+      }, INTERVAL_MS);
 
       stepTimeout = setTimeout(() => {
         setCurrentStepIndex((prev) => prev + 1);
