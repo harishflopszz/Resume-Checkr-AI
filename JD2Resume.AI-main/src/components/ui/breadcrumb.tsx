@@ -44,13 +44,20 @@ const BreadcrumbLink = React.forwardRef<
   React.ComponentPropsWithoutRef<"a"> & {
     asChild?: boolean
   }
->(({ asChild, className, ...props }, ref) => {
+(({ asChild, className, rel, target, ...props }, ref) => {
   const Comp = asChild ? Slot : "a"
+
+  const safeRel = target === "_blank" ? rel ?? "noopener noreferrer" : rel
 
   return (
     <Comp
       ref={ref}
-      className={cn("transition-colors hover:text-foreground", className)}
+      className={cn(
+        "transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        className
+      )}
+      rel={safeRel}
+      target={target}
       {...props}
     />
   )
