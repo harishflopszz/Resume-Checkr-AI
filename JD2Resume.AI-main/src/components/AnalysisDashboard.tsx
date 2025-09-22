@@ -268,7 +268,7 @@ interface EnhancedScoreCardProps {
   description: string;
 }
 const EnhancedScoreCard: React.FC<EnhancedScoreCardProps> = React.memo(({ icon: Icon, label, score, max, color, description }) => {
-  const clampedScore = Math.min(score, max);
+  const clampedScore = Math.max(0, Math.min(score, max));
   const percentage = (clampedScore / max) * 100;
   const [isHovered, setIsHovered] = useState(false);
   return (
