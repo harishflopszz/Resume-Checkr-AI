@@ -606,6 +606,7 @@ const SidebarMenuAction = React.forwardRef<
 
   return (
     <Comp
+      {...(!asChild && { type: "button" })}
       ref={ref}
       data-sidebar="menu-action"
       className={cn(
