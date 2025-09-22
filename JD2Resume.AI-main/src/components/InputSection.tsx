@@ -10,26 +10,7 @@ interface InputSectionProps {
 }
 
 const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => {
-  // Global error handler for file processing
-  React.useEffect(() => {
-    const errorHandler = (event: ErrorEvent) => {
-      console.error('Global error in InputSection:', event.error);
-      event.preventDefault();
-    };
-
-    const unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
-      console.error('Unhandled promise rejection in InputSection:', event.reason);
-      event.preventDefault();
-    };
-
-    window.addEventListener('error', errorHandler);
-    window.addEventListener('unhandledrejection', unhandledRejectionHandler);
-
-    return () => {
-      window.removeEventListener('error', errorHandler);
-      window.removeEventListener('unhandledrejection', unhandledRejectionHandler);
-    };
-  }, []);
+  // Consider handling errors via an app-level ErrorBoundary instead of global listeners here.
   const [resumeText, setResumeText] = useState('');
   const [jobDescText, setJobDescText] = useState('');
   const [fileName, setFileName] = useState<string | null>(null);
