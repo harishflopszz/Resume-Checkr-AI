@@ -7,8 +7,11 @@ interface FooterProps {
 const linkedinUrl = "https://www.linkedin.com/in/mukeshram-g-08a09622b/";
 const photoSrc = "/DeWatermark.ai_1752811203558~2.jpeg";
 
-export const Footer: React.FC<FooterProps> = ({ variant = "main" }) => {
+export function Footer({ variant = "main" }: FooterProps) {
   return (
+    ...
+  );
+}
     <footer
       className={
         variant === "landing"
