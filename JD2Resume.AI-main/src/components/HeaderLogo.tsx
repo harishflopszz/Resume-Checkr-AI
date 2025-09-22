@@ -3,8 +3,13 @@ import React from "react";
 import { Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const HeaderLogo = ({ size = 40, className = "", showHome = true }) => {
-  const navigate = useNavigate();
+type HeaderLogoProps = {
+  size?: number;
+  className?: string;
+  showHome?: boolean;
+};
+
+const HeaderLogo: React.FC<HeaderLogoProps> = ({ size = 40, className = "", showHome = true }) => {
   return (
     <div className={`flex items-center gap-2 sm:gap-3 select-none ${className}`}>
       {/* Logo and Text */}
