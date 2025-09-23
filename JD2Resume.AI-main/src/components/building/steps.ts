@@ -1,11 +1,12 @@
-import { BrainCircuit, FileSearch, PenSquare, Target, Sparkles } from "lucide-react";
+import { BrainCircuit, FileSearch, PenSquare, Target, Sparkles, type LucideIcon } from "lucide-react";
 
 export type StepDefinition = {
   text: string;
   duration: number;
-  icon: any;
+  icon: LucideIcon;
   color: string;
   glowColor: string;
+};
 };
 
 export const steps: StepDefinition[] = [
