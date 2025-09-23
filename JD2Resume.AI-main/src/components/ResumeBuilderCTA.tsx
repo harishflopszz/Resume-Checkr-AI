@@ -10,9 +10,9 @@ interface ResumeBuilderCTAProps {
 
 const ResumeBuilderCTA: React.FC<ResumeBuilderCTAProps> = ({ currentScore, onBuildResume }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const predictedScore = Math.min(95, currentScore + 22);
-  const improvement = predictedScore - currentScore;
-
+  const safeScore = Math.min(100, Math.max(0, currentScore));
+  const predictedScore = Math.max(safeScore, Math.min(95, safeScore + 22));
+  const improvement = Math.max(0, predictedScore - safeScore);
   return (
     <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-600 rounded-2xl md:rounded-3xl shadow-2xl">
       {/* Animated Background Elements */}
