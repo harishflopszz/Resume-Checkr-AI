@@ -39,6 +39,12 @@ const ModernResumeBuilder: React.FC<BuildingResumeViewProps> = ({ onBack }) => {
   useEffect(() => {
     const timer = setInterval(() => {
       const elapsed = Date.now() - startTimeRef.current;
+      if (elapsed >= totalDuration) {
+        setCurrentStep(BUILD_STEPS.length - 1);
+        setProgress(100);
+        clearInterval(timer);
+        return;
+      }
 
       let cumulativeTime = 0;
       let newCurrentStep = 0;
@@ -60,7 +66,6 @@ const ModernResumeBuilder: React.FC<BuildingResumeViewProps> = ({ onBack }) => {
 
     return () => clearInterval(timer);
   }, [totalDuration]);
-
   const currentStepData = BUILD_STEPS[currentStep];
 
   return (
