@@ -190,7 +190,9 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
                 <p className="text-sm text-gray-500">Paste the target job posting</p>
               </div>
             </div>
+            <label htmlFor="job-desc-text" className="sr-only">Job description</label>
             <Textarea
+              id="job-desc-text"
               placeholder="Paste the complete job description here..."
               value={jobDescText}
               onChange={(e) => setJobDescText(e.target.value)}
