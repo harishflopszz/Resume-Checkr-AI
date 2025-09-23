@@ -14,10 +14,17 @@ const ModernCard = React.forwardRef<HTMLDivElement, ModernCardProps>(
     const baseClasses = 'rounded-xl bg-white/80 backdrop-blur-sm border border-gray-200/60 shadow-sm';
     
     // Variant-specific classes
+    // Variant-specific classes
+    const glowColorClasses: Record<NonNullable<ModernCardProps['glowColor']>, string> = {
+      blue:   "hover:shadow-[0_0_30px_rgba(59,130,246,0.20)] border-blue-300/50",
+      pink:   "hover:shadow-[0_0_30px_rgba(236,72,153,0.20)] border-pink-300/50",
+      green:  "hover:shadow-[0_0_30px_rgba(34,197,94,0.20)] border-green-300/50",
+      purple: "hover:shadow-[0_0_30px_rgba(168,85,247,0.20)] border-purple-300/50",
+    };
     const variantClasses = {
       floating: 'hover:shadow-lg transition-shadow duration-300',
-      interactive: 'cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-200',
-      glow: `hover:shadow-lg hover:shadow-${glowColor}-500/20 border-${glowColor}-300/50`
+      interactive: 'cursor-pointer hover:shadow-md hover:-translate-y-1 transition-transform duration-200',
+      glow: cn('hover:shadow-lg', glowColorClasses[glowColor]),
     };
 
     return (
