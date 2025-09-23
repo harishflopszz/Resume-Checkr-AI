@@ -141,11 +141,17 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
                 )}
               </div>
             ) : (
-              <div
+              <label
+                htmlFor="resume-file-input"
+                role="button"
+                tabIndex={0}
+                aria-label="Select your resume file"
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleFileSelect()}
                 className="relative p-8 sm:p-6 text-center border-2 border-dashed rounded-xl cursor-pointer transition-all duration-300 group mb-4 file-upload-container border-gray-300 hover:border-blue-400 hover:bg-blue-50"
                 onClick={handleFileSelect}
               >
                 <input
+                  id="resume-file-input"
                   ref={fileInputRef}
                   type="file"
                   accept=".pdf,.docx,.txt"
@@ -154,10 +160,10 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
                   style={{ display: 'none' }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
-                <UploadCloud className="mx-auto h-10 w-10 text-gray-400 group-hover:text-blue-600 transition-colors duration-300 mb-3"/>
+                <UploadCloud className="mx-auto h-10 w-10 text-gray-400 group-hover:text-blue-600 transition-colors duration-300 mb-3" aria-hidden="true" />
                 <p className="font-semibold text-gray-900 mb-1">Click to select your resume</p>
                 <p className="text-xs text-gray-500">Supports PDF, DOCX, and TXT files</p>
-              </div>
+              </label>
             )}
 
             <Textarea
