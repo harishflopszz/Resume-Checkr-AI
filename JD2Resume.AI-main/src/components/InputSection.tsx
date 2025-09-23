@@ -166,13 +166,15 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
               </label>
             )}
 
+            <label htmlFor="resume-text" className="sr-only">Resume content</label>
             <Textarea
+              id="resume-text"
               placeholder="Or paste your resume content here..."
               value={resumeText}
               onChange={(e) => setResumeText(e.target.value)}
               className="min-h-[120px] sm:min-h-[160px] bg-gray-50 border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 rounded-xl resize-none"
             />
-            {parseError && <p className="text-sm text-red-600 mt-2">{parseError}</p>}
+            {parseError && <p className="text-sm text-red-600 mt-2" role="alert" aria-live="polite">{parseError}</p>}
           </ModernCard>
 
           <ModernCard
