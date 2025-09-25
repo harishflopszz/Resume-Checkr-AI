@@ -43,14 +43,28 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 export async function callGemini<T>(prompt: string, retries = 3, delay = 2000): Promise<T> {
   for (let i = 0; i < retries; i++) {
     try {
-      const chatSession = model.startChat({
-        generationConfig,
-        safetySettings,
-        history: [],
+      // Use the Netlify function proxy instead of direct API calls
+      const response = await fetch('/.netlify/functions/gemini-proxy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt }),
       });
 
-      const result = await chatSession.sendMessage(prompt);
-      const responseText = result.response.text();
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Extract the text from the response
+      const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      if (!responseText) {
+        throw new Error('No response text received from API');
+      }
 
       const cleanedJson = responseText.replace(/```json/g, "").replace(/```/g, "").trim();
 
@@ -71,10 +85,10 @@ export async function callGemini<T>(prompt: string, retries = 3, delay = 2000): 
 
     } catch (error: any) {
       console.error(`Error calling Gemini API (attempt ${i + 1}/${retries}):`, error);
-      
+
       const isLastAttempt = i === retries - 1;
-      const isRateLimitError = error.toString().includes('429');
-      const isServiceUnavailable = error.toString().includes('503');
+      const isRateLimitError = error.toString().includes('429') || error.message.includes('quota');
+      const isServiceUnavailable = error.toString().includes('503') || error.message.includes('overloaded');
 
       if (isLastAttempt) {
         if (isRateLimitError) {
@@ -88,7 +102,7 @@ export async function callGemini<T>(prompt: string, retries = 3, delay = 2000): 
         }
         throw new Error("Failed to generate content from AI after multiple attempts.");
       }
-      
+
       if (isServiceUnavailable) {
         // Wait before retrying with exponential backoff for server overload
         await sleep(delay * Math.pow(2, i));
