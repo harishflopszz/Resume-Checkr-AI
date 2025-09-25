@@ -1053,18 +1053,17 @@ const OptimizedResumeDisplay: React.FC<OptimizedResumeDisplayProps> = ({ resume,
                 </SectionCard>
               )}
 
-  additionalSections?: Array<{
-    title: string;
-    content: string | string[];
-  }>;
-                      .map((section: any, i: number) => (
-                        <div key={i} className="border-b border-gray-100 pb-4 last:border-b-0">
-                          <h4 className="font-bold text-base sm:text-lg text-black">{section.title}</h4>
-                          <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                            {Array.isArray(section.content) ? section.content.join('\n') : section.content}
-                          </p>
-                        </div>
-                      ))}
+              {finalResume.additionalSections && finalResume.additionalSections.length > 0 && (
+                <SectionCard title="Additional Sections" icon={Lightbulb}>
+                  <div className="space-y-6">
+                    {finalResume.additionalSections.map((section: any, i: number) => (
+                      <div key={i} className="border-b border-gray-100 pb-4 last:border-b-0">
+                        <h4 className="font-bold text-base sm:text-lg text-black">{section.title}</h4>
+                        <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                          {Array.isArray(section.content) ? section.content.join('\n') : section.content}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </SectionCard>
               )}

@@ -1,12 +1,19 @@
+import * as React from "react";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 
-import * as React from "react"
-import { ThemeProvider as NextThemesProvider, type ThemeProviderProps } from "next-themes"
+interface CustomThemeProviderProps {
+  className?: string;
+  attribute?: string;
+  defaultTheme?: string;
+  enableSystem?: boolean;
+  forcedTheme?: string;
+  children: React.ReactNode;
+}
 
-export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+export function ThemeProvider({ children, ...props }: CustomThemeProviderProps) {
   return (
-    <NextThemesProvider attribute="class" defaultTheme="system" enableSystem {...props}>
+    <NextThemesProvider {...props}>
       {children}
     </NextThemesProvider>
-  )
-}
+  );
 }

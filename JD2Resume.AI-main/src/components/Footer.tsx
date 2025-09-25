@@ -9,9 +9,6 @@ const photoSrc = "/DeWatermark.ai_1752811203558~2.jpeg";
 
 export function Footer({ variant = "main" }: FooterProps) {
   return (
-    ...
-  );
-}
     <footer
       className={
         variant === "landing"

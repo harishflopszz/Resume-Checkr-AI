@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { UploadCloud, FileText, X, Briefcase, Sparkles, CheckCircle } from 'lucide-react';
 import { extractTextFromFile } from '@/lib/parsers';
 import ModernCard from './ui/ModernCard';
@@ -19,9 +19,102 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
   const [isFilePickerOpen, setIsFilePickerOpen] = useState(false);
   const [lastClickTime, setLastClickTime] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const protectionTimeoutRef = useRef<number | null>(null);
 
   const handleFileSelect = () => {
-    fileInputRef.current?.click();
+    console.log('🔒 FILE SELECT STARTED - PROTECING PAGE');
+
+    // Immediate protection - set status and lock browsers
+    setIsFilePickerOpen(true);
+
+    let isProtectionActive = true;
+
+    // MULTIPLE LAYER PROTECTION SYSTEM
+    const protections = {
+      // Layer 1: Block all navigation attempts
+      beforeUnload: (e: BeforeUnloadEvent) => {
+        console.log('🚫 Blocking navigation attempt during file selection');
+        e.preventDefault();
+        e.returnValue = 'Selecting file, please wait...';
+        if (isProtectionActive) return e.returnValue;
+      },
+
+      // Layer 2: Catch actual unload events
+      unload: (e: Event) => {
+        console.log('🚫 Blocking actual page unload during file selection');
+        if (isProtectionActive) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          return false;
+        }
+      },
+
+      // Layer 3: Handle visibility changes (background/foreground)
+      visibility: () => {
+        if (document.visibilityState === 'visible' && isProtectionActive) {
+          console.log('📱 Page visible - user returned from file picker');
+          // Keep protection active until file is actually selected
+          setTimeout(cleanupProtections, 1000); // Give time for file selection
+        } else {
+          console.log('📱 Page hidden - user in file system');
+        }
+      },
+
+      // Layer 4: Prevent mobile browser cache/memory cleanup
+      pageHide: () => {
+        console.log('📱 Page hide - protecting against mobile browser cleanup');
+      },
+
+      // Layer 5: Handle when app becomes visible again
+      pageShow: () => {
+        console.log('📱 Page show - mobile browser restored');
+      }
+    };
+
+    // ACTIVATE ALL PROTECTION LAYERS
+    window.addEventListener('beforeunload', protections.beforeUnload, { capture: true });
+    window.addEventListener('unload', protections.unload, { capture: true });
+    document.addEventListener('visibilitychange', protections.visibility);
+    window.addEventListener('pagehide', protections.pageHide);
+    window.addEventListener('pageshow', protections.pageShow);
+
+    // Clean up function
+    const cleanupProtections = () => {
+      if (isProtectionActive) {
+        console.log('🧹 Cleaning up file selection protections');
+        isProtectionActive = false;
+        setIsFilePickerOpen(false);
+
+        window.removeEventListener('beforeunload', protections.beforeUnload);
+        window.removeEventListener('unload', protections.unload);
+        document.removeEventListener('visibilitychange', protections.visibility);
+        window.removeEventListener('pagehide', protections.pageHide);
+        window.removeEventListener('pageshow', protections.pageShow);
+      }
+    };
+
+    // EXECUTE FILE PICKER
+    if (fileInputRef.current) {
+      console.log('📁 Opening file picker...');
+
+      try {
+        fileInputRef.current.click();
+        console.log('✅ File picker opened successfully - PAGE PROTECTED');
+      } catch (error) {
+        console.error('❌ File picker failed:', error);
+        cleanupProtections();
+        return;
+      }
+
+      // Add a timeout for protection cleanup
+      protectionTimeoutRef.current = window.setTimeout(() => {
+        console.log('⏰ File picker timeout - cleaning up (5min limit)');
+        cleanupProtections();
+      }, 300000); // 5 minutes
+    } else {
+      console.error('❌ File input not found');
+      cleanupProtections();
+    }
   };
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,6 +159,14 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
   };
 
   const isReadyToAnalyze = resumeText.trim() && jobDescText.trim();
+
+  useEffect(() => {
+    return () => {
+      if (protectionTimeoutRef.current) {
+        clearTimeout(protectionTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -141,17 +242,11 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
                 )}
               </div>
             ) : (
-              <label
-                htmlFor="resume-file-input"
-                role="button"
-                tabIndex={0}
-                aria-label="Select your resume file"
-                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleFileSelect()}
+              <div
                 className="relative p-8 sm:p-6 text-center border-2 border-dashed rounded-xl cursor-pointer transition-all duration-300 group mb-4 file-upload-container border-gray-300 hover:border-blue-400 hover:bg-blue-50"
                 onClick={handleFileSelect}
               >
                 <input
-                  id="resume-file-input"
                   ref={fileInputRef}
                   type="file"
                   accept=".pdf,.docx,.txt"
@@ -160,10 +255,10 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
                   style={{ display: 'none' }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
-                <UploadCloud className="mx-auto h-10 w-10 text-gray-400 group-hover:text-blue-600 transition-colors duration-300 mb-3" aria-hidden="true" />
+                <UploadCloud className="mx-auto h-10 w-10 text-gray-400 group-hover:text-blue-600 transition-colors duration-300 mb-3"/>
                 <p className="font-semibold text-gray-900 mb-1">Click to select your resume</p>
                 <p className="text-xs text-gray-500">Supports PDF, DOCX, and TXT files</p>
-              </label>
+              </div>
             )}
 
             <label htmlFor="resume-text" className="sr-only">Resume content</label>
