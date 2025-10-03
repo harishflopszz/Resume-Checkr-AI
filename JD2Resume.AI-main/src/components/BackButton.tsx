@@ -33,6 +33,7 @@ const BackButton: React.FC<BackButtonProps> = ({
   const withLabel = Boolean(label);
   return (
     <button
+      type="button"
       onClick={onClick}
       aria-label={label ?? "Back"}
       className={`inline-flex items-center gap-2 rounded-full transition-all duration-300 ${sizing.btn} ${variantClasses[variant]} ${className} ${
