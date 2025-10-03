@@ -15,6 +15,7 @@ export const useProgress = ({ isLoading, duration = 25000, apiComplete = false }
       // Clear any existing interval
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
 
       const startTime = Date.now();
@@ -28,9 +29,12 @@ export const useProgress = ({ isLoading, duration = 25000, apiComplete = false }
         }
 
         // Calculate progress based on elapsed time
-        const calculatedProgress = Math.min((elapsed / duration) * targetProgress, targetProgress);
+        const calculatedProgress = Math.min(
+          (elapsed / duration) * targetProgress,
+          targetProgress
+        );
 
-        // Only update if progress changed significantly to reduce re-renders
+        // Only update if progress changed significantly (>0.5%) to reduce re-renders
         setProgress(prev => {
           if (Math.abs(prev - calculatedProgress) > 0.5) {
             return calculatedProgress;
@@ -38,8 +42,8 @@ export const useProgress = ({ isLoading, duration = 25000, apiComplete = false }
           return prev;
         });
 
-        // If we've reached the target and API is complete, clear the interval
-        if (calculatedProgress >= targetProgress && apiComplete) {
+        // If we've reached 100%, clear the interval
+        if (apiComplete && calculatedProgress >= 100) {
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
             intervalRef.current = null;
