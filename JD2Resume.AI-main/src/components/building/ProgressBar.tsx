@@ -10,7 +10,14 @@ export function ProgressBar({
   currentColor: string;
   glowColor: string;
 }) {
-  const solidGlow = glowColor.split("(")[0] + "(" + glowColor.split("(")[1].replace("0.7", "1");
+  const solidGlow = (() => {
+    const match = glowColor.match(/rgba?\(([^)]+)\)/)
+    if (!match) return glowColor
+    const channels = match[1].split(",").map(part => part.trim())
+    if (channels.length < 4) return glowColor
+    channels[3] = "1"
+    return `rgba(${channels.join(", ")})`
+  })()
   return (
     <motion.div
       className="mb-6 md:mb-7 px-2"
