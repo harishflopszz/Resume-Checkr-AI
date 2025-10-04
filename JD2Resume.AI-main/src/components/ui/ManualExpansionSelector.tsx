@@ -197,7 +197,11 @@ export const ManualExpansionSelector: React.FC<ManualExpansionSelectorProps> = (
                                       <Edit3 className="w-4 h-4" />
                                     </button>
                                     <button
-                                      onClick={() => onContentDelete(section.id, contentIndex)}
+                                      onClick={() => {
+                                        if (window.confirm('Delete this content item?')) {
+                                          onContentDelete(section.id, contentIndex);
+                                        }
+                                      }}
                                       className="p-1 text-red-600 hover:bg-red-50 rounded"
                                       title="Delete"
                                     >
