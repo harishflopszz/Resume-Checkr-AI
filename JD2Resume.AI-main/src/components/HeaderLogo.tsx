@@ -1,7 +1,22 @@
 import React from "react";
 
-import { Home } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+
+type HeaderLogoProps = {
+  size?: number;
+  className?: string;
+  showHome?: boolean;
+};
+  
+const HeaderLogo: React.FC<HeaderLogoProps> = ({
+  size = 40,
+  className = "",
+  showHome = true,
+}) => {
+  // …rest of component…
+};
+
+export default HeaderLogo;
 
 type HeaderLogoProps = {
   size?: number;
