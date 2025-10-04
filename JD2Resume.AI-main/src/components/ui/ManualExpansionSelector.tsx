@@ -61,7 +61,7 @@ export const ManualExpansionSelector: React.FC<ManualExpansionSelectorProps> = (
   };
 
   const saveEditing = () => {
-    if (editingContent) {
+    if (editingContent && editValue.trim()) {
       onContentEdit(editingContent.sectionId, editingContent.contentIndex, editValue);
       setEditingContent(null);
       setEditValue('');
