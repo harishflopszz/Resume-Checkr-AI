@@ -193,17 +193,19 @@ export const ManualExpansionSelector: React.FC<ManualExpansionSelectorProps> = (
                                       onClick={() => startEditing(section.id, contentIndex, content)}
                                       className="p-1 text-blue-600 hover:bg-blue-50 rounded"
                                       title="Edit"
+                                    <button
+                                      onClick={() => startEditing(section.id, contentIndex, content)}
+                                      className="p-1 text-blue-600 hover:bg-blue-50 rounded"
+                                      title="Edit"
+                                      aria-label="Edit content"
                                     >
                                       <Edit3 className="w-4 h-4" />
                                     </button>
                                     <button
-                                      onClick={() => {
-                                        if (window.confirm('Delete this content item?')) {
-                                          onContentDelete(section.id, contentIndex);
-                                        }
-                                      }}
+                                      onClick={() => onContentDelete(section.id, contentIndex)}
                                       className="p-1 text-red-600 hover:bg-red-50 rounded"
                                       title="Delete"
+                                      aria-label="Delete content"
                                     >
                                       <Trash2 className="w-4 h-4" />
                                     </button>
