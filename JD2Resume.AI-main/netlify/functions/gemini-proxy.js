@@ -120,20 +120,29 @@ exports.handler = async (event) => {
 
   } catch (error) {
     console.error('Gemini proxy error:', error);
-    
+
+    const errorString = String(error);
+    const errorMessageText =
+      typeof error === 'object' && error !== null && 'message' in error
+        ? String(error.message)
+        : '';
+
     let errorMessage = 'An unexpected error occurred';
     let statusCode = 500;
 
-    if (error.toString().includes('429') || error.message.includes('quota')) {
+    if (errorString.includes('429') || errorMessageText.includes('quota')) {
       errorMessage = 'API quota exceeded';
       statusCode = 429;
-    } else if (error.toString().includes('503') || error.message.includes('overloaded')) {
+    } else if (errorString.includes('503') || errorMessageText.includes('overloaded')) {
       errorMessage = 'Service temporarily unavailable';
       statusCode = 503;
-    } else if (error.message.includes('SAFETY')) {
+    } else if (errorMessageText.includes('SAFETY')) {
       errorMessage = 'Request blocked due to safety settings';
       statusCode = 400;
-    } else if (error.message.includes('network') || error.message.includes('fetch')) {
+    } else if (
+      errorMessageText.includes('network') ||
+      errorMessageText.includes('fetch')
+    ) {
       errorMessage = 'Network connectivity issue';
       statusCode = 502;
     }
