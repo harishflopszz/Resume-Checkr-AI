@@ -78,10 +78,15 @@ export const ResumeBuilder: React.FC<ResumeBuilderProps> = ({ onResumeGenerated 
           {/* Input Section */}
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="original-resume"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Original Resume Text
               </label>
               <textarea
+                id="original-resume"
+                aria-label="Original Resume Text"
                 value={originalResume}
                 onChange={(e) => setOriginalResume(e.target.value)}
                 placeholder="Paste your current resume text here... (any length, any format)"
@@ -90,10 +95,15 @@ export const ResumeBuilder: React.FC<ResumeBuilderProps> = ({ onResumeGenerated 
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="job-description"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Target Job Description
               </label>
               <textarea
+                id="job-description"
+                aria-label="Target Job Description"
                 value={jobDescription}
                 onChange={(e) => setJobDescription(e.target.value)}
                 placeholder="Paste the job description you're targeting..."
