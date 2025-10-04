@@ -7,7 +7,22 @@ export interface UseResumeBuilderResult {
   buildResume: (originalText: string, jobDescription: string) => Promise<OptimizedResume>;
   error: string | null;
   analysis: ResumeAnalysis | null;
-  validation: any | null;
+export interface ValidationResult {
+  isCompliant: boolean;
+  issues: string[];
+  recommendations: string[];
+  contentDensity: number;
+  pageUtilization: string;
+}
+
+export interface UseResumeBuilderResult {
+  isBuilding: boolean;
+  buildResume: (originalText: string, jobDescription: string) => Promise<OptimizedResume>;
+  error: string | null;
+  analysis: ResumeAnalysis | null;
+  validation: ValidationResult | null;
+  resetState: () => void;
+}
   resetState: () => void;
 }
 
