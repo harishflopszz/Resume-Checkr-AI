@@ -99,7 +99,9 @@ import React, { useEffect, useState, useId } from 'react';
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
-          style={{ transition: 'stroke-dashoffset 1.5s ease-out' }}
+           strokeDashoffset={offset}
+           strokeLinecap="round"
+         />
         />
       </svg>
       <div className={`absolute flex flex-col items-center ${scoreColor}`}>
