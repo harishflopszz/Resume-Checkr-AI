@@ -16,11 +16,13 @@ export const ResumeBuilder: React.FC<ResumeBuilderProps> = ({ onResumeGenerated 
   const handleBuildResume = async () => {
     try {
       resetState();
+      setGeneratedResume(null);
       const resume = await buildResume(originalResume, jobDescription);
       setGeneratedResume(resume);
       onResumeGenerated?.(resume);
     } catch (err) {
       console.error('Resume building failed:', err);
+      setGeneratedResume(null);
     }
   };
 
