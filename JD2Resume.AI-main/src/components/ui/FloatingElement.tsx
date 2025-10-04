@@ -8,11 +8,12 @@ interface FloatingElementProps {
 
 const FloatingElement: React.FC<FloatingElementProps> = ({ children, delay = 0, className = "" }) => (
   <div
+  <div
     className={`animate-float ${className}`}
     style={{
-      animationDelay: `${delay}s`,
       animation: `float 6s ease-in-out infinite ${delay}s`,
     }}
+  >
   >
     {children}
   </div>
