@@ -19,6 +19,7 @@ export function useProgress(steps: StepDefinition[]) {
   useEffect(() => {
     let stepTimeout: ReturnType<typeof setTimeout> | null = null;
     let progressInterval: ReturnType<typeof setInterval> | null = null;
+    let completionTimeout: ReturnType<typeof setTimeout> | null = null;
 
     if (currentStepIndex < steps.length) {
       const currentStep = steps[currentStepIndex];
@@ -44,8 +45,15 @@ export function useProgress(steps: StepDefinition[]) {
       }, currentStep.duration);
     } else if (currentStepIndex === steps.length && !isComplete) {
       setProgress(100);
-      setTimeout(() => setIsComplete(true), 500);
+      completionTimeout = setTimeout(() => setIsComplete(true), 500);
     }
+
+    return () => {
+      if (stepTimeout) clearTimeout(stepTimeout);
+      if (progressInterval) clearInterval(progressInterval);
+      if (completionTimeout) clearTimeout(completionTimeout);
+    };
+  }, [currentStepIndex, isComplete, steps]);
 
     return () => {
       if (stepTimeout) clearTimeout(stepTimeout);
