@@ -21,9 +21,25 @@ const MatchScoreCircular: React.FC<MatchScoreCircularProps> = ({
   const scoreColor =
     score < 40 ? 'text-red-600' : score < 70 ? 'text-blue-600' : 'text-green-600';
   
-  const scoreGradientId = `scoreGradient-${score}`;
-  const scoreGradientColor = 
-    score < 40 ? '#DC2626' : score < 70 ? '#2563EB' : '#059669';
+// At the top of the file
+import React, { useEffect, useState, useId } from 'react';
+
+ const MatchScoreCircular: React.FC<MatchScoreCircularProps> = ({
+   score,
+   size = 200,
+   strokeWidth = 16,
+ }) => {
+  const uniqueId = useId();
+   const [displayScore, setDisplayScore] = useState(0);
+   
+   // ... radius, circumference, offset ...
+
+  const scoreGradientId = `scoreGradient-${uniqueId}`;
+   const scoreGradientColor =
+     score < 40 ? '#DC2626' : score < 70 ? '#2563EB' : '#059669';
+
+   // ...
+ };
 
   useEffect(() => {
     let animationFrameId: number;
