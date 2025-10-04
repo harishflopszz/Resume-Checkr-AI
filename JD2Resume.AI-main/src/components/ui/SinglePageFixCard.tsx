@@ -110,7 +110,7 @@ export const SinglePageFixCard: React.FC<SinglePageFixCardProps> = ({
         <div className="mt-3 pt-3 border-t border-gray-200/50">
           <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
             <span>Content Length</span>
-            <span>{wordCount} / 700+ words</span>
+            <span>{wordCount ?? 0} / 800 words</span>
           </div>
           <div className="w-full bg-gray-200/50 rounded-full h-2">
             <motion.div
@@ -118,7 +118,7 @@ export const SinglePageFixCard: React.FC<SinglePageFixCardProps> = ({
                 estimatedLength === 'too_short' ? 'bg-purple-500' : 'bg-orange-500'
               }`}
               initial={{ width: 0 }}
-              animate={{ width: `${Math.min((wordCount! / 800) * 100, 100)}%` }}
+              animate={{ width: `${Math.min(((wordCount ?? 0) / 800) * 100, 100)}%` }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             />
           </div>
