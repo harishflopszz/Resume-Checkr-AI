@@ -40,11 +40,11 @@ const BreadcrumbItem = React.forwardRef<
 BreadcrumbItem.displayName = "BreadcrumbItem"
 
 const BreadcrumbLink = React.forwardRef<
-  HTMLAnchorElement,
+  HTMLElement,
   React.ComponentPropsWithoutRef<"a"> & {
     asChild?: boolean
   }
-> (({ asChild, className, rel, target, ...props }, ref) => {
+>(({ asChild, className, rel, target, ...props }, ref) => {
   const Comp = asChild ? Slot : "a"
 
   const safeRel = target === "_blank" ? rel ?? "noopener noreferrer" : rel
