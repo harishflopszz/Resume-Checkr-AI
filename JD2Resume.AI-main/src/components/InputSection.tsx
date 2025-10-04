@@ -255,6 +255,15 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
               <div
                 className="relative p-8 sm:p-6 text-center border-2 border-dashed rounded-xl cursor-pointer transition-all duration-300 group mb-4 file-upload-container border-gray-300 hover:border-blue-400 hover:bg-blue-50"
                 onClick={handleFileSelect}
+               onKeyDown={(e) => {
+                 if (e.key === 'Enter' || e.key === ' ') {
+                   e.preventDefault();
+                   handleFileSelect();
+                 }
+               }}
+               role="button"
+               tabIndex={0}
+               aria-label="Select resume file"
               >
                 <input
                   ref={fileInputRef}
