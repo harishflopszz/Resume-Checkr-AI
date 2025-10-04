@@ -20,7 +20,10 @@ const App = () => (
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <Routes>
             <Route path="/" element={<MainApp />} />
-            <Route path="/new" element={<NewBuildingResumeView onBack={() => {}} />} />
+            <Route
+              path="/new"
+              element={<NewBuildingResumeView onBack={() => window.history.back()} />}
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
