@@ -54,9 +54,22 @@ import React, { useEffect, useState, useId } from 'react';
   }, [score]);
   
   useEffect(() => {
-    // Reset animation when score changes
-    setDisplayScore(0);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    setDisplayScore(0); // Reset immediately
+    const startTime = performance.now();
+    const duration = 1500;
+    let animationFrameId: number;
+
+    const animateScore = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      setDisplayScore(Math.round(progress * score));
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(animateScore);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animateScore);
+    return () => cancelAnimationFrame(animationFrameId);
   }, [score]);
 
   return (
