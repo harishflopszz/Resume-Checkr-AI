@@ -35,8 +35,8 @@ export interface BuildingResumeViewProps {
 const ModernResumeBuilder: React.FC<BuildingResumeViewProps> = ({ onBack, isLoading = true, apiComplete = false }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [internalApiComplete, setInternalApiComplete] = useState(false);
-  const progress = useProgress({ isLoading, duration: 30000, apiComplete: apiComplete || internalApiComplete });
-
+  const { progress, currentStepIndex } = useProgress(BUILD_STEPS);
+  useEffect(() => setCurrentStep(currentStepIndex), [currentStepIndex]);
   useEffect(() => {
     const stepIndex = BUILD_STEPS.findIndex(step => progress >= step.progressRange[0] && progress < step.progressRange[1]);
     if (stepIndex !== -1) {
