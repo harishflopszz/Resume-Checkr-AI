@@ -40,8 +40,6 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = () => {
-    console.log('🔒 FILE SELECT STARTED - PROTECING PAGE');
-
     // Immediate protection - set status and lock browsers
     setIsFilePickerOpen(true);
 
@@ -51,7 +49,6 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
     const protections = {
       // Layer 1: Block all navigation attempts
       beforeUnload: (e: BeforeUnloadEvent) => {
-        console.log('🚫 Blocking navigation attempt during file selection');
         e.preventDefault();
         e.returnValue = 'Selecting file, please wait...';
         if (isProtectionActive) return e.returnValue;
@@ -59,7 +56,6 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
 
       // Layer 2: Catch actual unload events
       unload: (e: Event) => {
-        console.log('🚫 Blocking actual page unload during file selection');
         if (isProtectionActive) {
           e.preventDefault();
           e.stopImmediatePropagation();
@@ -70,22 +66,17 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
       // Layer 3: Handle visibility changes (background/foreground)
       visibility: () => {
         if (document.visibilityState === 'visible' && isProtectionActive) {
-          console.log('📱 Page visible - user returned from file picker');
           // Keep protection active until file is actually selected
           setTimeout(cleanupProtections, 1000); // Give time for file selection
-        } else {
-          console.log('📱 Page hidden - user in file system');
         }
       },
 
       // Layer 4: Prevent mobile browser cache/memory cleanup
       pageHide: () => {
-        console.log('📱 Page hide - protecting against mobile browser cleanup');
       },
 
       // Layer 5: Handle when app becomes visible again
       pageShow: () => {
-        console.log('📱 Page show - mobile browser restored');
       }
     };
 
@@ -99,7 +90,6 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
     // Clean up function
     const cleanupProtections = () => {
       if (isProtectionActive) {
-        console.log('🧹 Cleaning up file selection protections');
         isProtectionActive = false;
         setIsFilePickerOpen(false);
 
@@ -113,24 +103,18 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
 
     // EXECUTE FILE PICKER
     if (fileInputRef.current) {
-      console.log('📁 Opening file picker...');
-
       // Add a timeout for protection cleanup
       const protectionTimeout = setTimeout(() => {
-        console.log('⏰ File picker timeout - cleaning up (5min limit)');
         cleanupProtections();
       }, 300000); // 5 minutes
 
       try {
         fileInputRef.current.click();
-        console.log('✅ File picker opened successfully - PAGE PROTECTED');
       } catch (error) {
-        console.error('❌ File picker failed:', error);
         cleanupProtections();
         return;
       }
     } else {
-      console.error('❌ File input not found');
       cleanupProtections();
     }
   };
@@ -146,11 +130,8 @@ const InputSection: React.FC<InputSectionProps> = ({ onAnalyze, isLoading }) => 
       setIsParsingFile(true);
 
       try {
-        console.log('Starting file extraction for:', file.name);
         const text = await extractTextFromFile(file);
-        console.log('File extraction completed, setting resume text');
         setResumeText(text);
-        console.log('Resume text set successfully');
       } catch (error: any) {
         console.error('File extraction error:', error);
         setParseError(error.message || 'Failed to process file. Please try again.');

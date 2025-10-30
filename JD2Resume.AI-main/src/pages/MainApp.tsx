@@ -30,9 +30,6 @@ const MainApp = () => {
   const [jobDescriptionText, setJobDescriptionText] = useState<string>('');
 
   const handleAnalyze = async (resumeText: string, jobDescText: string) => {
-    // STEP 1: Confirm resume and job description being sent
-    console.log('STEP 1: Analyzing resume text:', resumeText);
-    console.log('STEP 1: Analyzing job description:', jobDescText);
     if (!resumeText.trim() || !jobDescText.trim()) {
       toast.error('Please provide both resume and job description');
       return;
@@ -44,19 +41,12 @@ const MainApp = () => {
     setIsLoading(true);
     setCurrentState('analyzing');
     try {
-      console.log('STEP 2: Starting resume analysis with Gemini AI...');
       const results = await analyzeResume(resumeText, jobDescText);
-      // STEP 3: Log the raw analysis results
-      console.log('STEP 3: Analysis completed. Raw results:', results);
-      if (results && results.matchScore) {
-        console.log('STEP 4: ATS Score:', results.matchScore.total);
-        console.log('STEP 4: Score breakdown:', results.matchScore);
-      }
       setAnalysisResults(results);
       setCurrentState('results');
       toast.success('Analysis completed successfully!');
     } catch (error) {
-      console.error('STEP 5: Analysis failed:', error);
+      console.error('Analysis failed:', error);
       toast.error('Analysis failed. Please try again.');
       setCurrentState('input');
     } finally {
